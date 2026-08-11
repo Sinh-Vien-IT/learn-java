@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senior Java & Tech Lead — Interview Bootcamp Portal</title>
+  <meta name="description" content="Bộ giáo trình ôn phỏng vấn hoàn chỉnh dành cho Senior Java Backend Engineer và Java Tech Lead.">
+  
+  <!-- Favicon & Styling -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Prism.js Syntax Highlighting CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <a href="#README.md" class="logo-area">
+      <i class="fab fa-java" style="color: var(--accent-blue); font-size: 1.5rem;"></i>
+      <span>Senior Java Bootcamp</span>
+      <span class="logo-badge">TECH LEAD</span>
+    </a>
+
+    <div class="nav-actions">
+      <!-- Search Input -->
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Tìm bài học, chủ đề..." autocomplete="off">
+        <div id="searchResults" class="search-results-modal"></div>
+      </div>
+
+      <!-- Theme Switcher -->
+      <button id="themeToggle" class="theme-toggle" title="Đổi giao diện Sáng/Tối">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileToggle" class="mobile-toggle" title="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Application Main Body -->
+  <div id="app">
+    <!-- Left Navigation Drawer -->
+    <nav id="sidebar" class="sidebar"></nav>
+
+    <!-- Main Content Reader -->
+    <main class="main-layout">
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <!-- CDN Dependencies -->
+  <!-- Marked.js (Markdown Parser) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Prism.js (Syntax Highlighting) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+  <!-- Main App Script -->
+  <script src="app.js"></script>
+</body>
+</html>
