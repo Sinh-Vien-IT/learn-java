@@ -1,6 +1,6 @@
 /**
  * Senior Java & Tech Lead Bootcamp App Logic
- * Single Page App (SPA) Router, Markdown Fetcher, Search, Progress Tracker
+ * Single Page App (SPA) Router, Mobile Navigation & Search
  */
 
 const CURRICULUM_MANIFEST = [
@@ -71,6 +71,8 @@ class App {
   constructor() {
     this.currentPath = "README.md";
     this.sidebarEl = document.getElementById("sidebar");
+    this.sidebarMenuContent = document.getElementById("sidebarMenuContent");
+    this.sidebarOverlay = document.getElementById("sidebarOverlay");
     this.contentEl = document.getElementById("content");
     this.searchOverlay = document.getElementById("searchResults");
     
@@ -108,22 +110,49 @@ class App {
       });
       html += `</ul></div>`;
     });
-    this.sidebarEl.innerHTML = html;
+    this.sidebarMenuContent.innerHTML = html;
   }
 
   bindEvents() {
     window.addEventListener("hashchange", () => this.handleRoute());
     
     document.getElementById("themeToggle").addEventListener("click", () => this.toggleTheme());
-    document.getElementById("mobileToggle").addEventListener("click", () => {
-      this.sidebarEl.classList.toggle("open");
+    document.getElementById("barThemeBtn").addEventListener("click", () => this.toggleTheme());
+
+    // Mobile Sidebar Drawer Actions
+    const openSidebar = () => {
+      this.sidebarEl.classList.add("open");
+      this.sidebarOverlay.classList.add("active");
+    };
+    const closeSidebar = () => {
+      this.sidebarEl.classList.remove("open");
+      this.sidebarOverlay.classList.remove("active");
+    };
+
+    document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
+    this.sidebarOverlay.addEventListener("click", closeSidebar);
+    document.getElementById("barMenuBtn").addEventListener("click", openSidebar);
+
+    // Mobile Top Button
+    document.getElementById("barTopBtn").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    // Mobile Search Activation
+    const focusSearch = () => {
+      this.searchOverlay.style.display = "block";
+      const input = document.getElementById("searchInput");
+      input.focus();
+    };
+    document.getElementById("mobileSearchBtn").addEventListener("click", focusSearch);
+    document.getElementById("barSearchBtn").addEventListener("click", focusSearch);
+
+    // Search input listener
     const searchInput = document.getElementById("searchInput");
     searchInput.addEventListener("input", (e) => this.handleSearch(e.target.value));
     
     document.addEventListener("click", (e) => {
-      if (!this.searchOverlay.contains(e.target) && e.target !== searchInput) {
+      if (!this.searchOverlay.contains(e.target) && e.target !== searchInput && !e.target.closest('.mobile-search-btn') && !e.target.closest('#barSearchBtn')) {
         this.searchOverlay.style.display = "none";
       }
     });
@@ -144,14 +173,15 @@ class App {
 
     // Close mobile sidebar if open
     this.sidebarEl.classList.remove("open");
+    this.sidebarOverlay.classList.remove("active");
 
     await this.loadMarkdown(this.currentPath);
   }
 
   async loadMarkdown(path) {
-    this.contentEl.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--text-muted);">
+    this.contentEl.innerHTML = `<div style="text-align:center; padding: 4rem 1rem; color: var(--text-muted);">
       <i class="fas fa-spinner fa-spin fa-2x"></i>
-      <p style="margin-top: 1rem;">Đang tải bài học...</p>
+      <p style="margin-top: 1rem; font-size:0.9rem;">Đang tải bài học...</p>
     </div>`;
 
     try {
@@ -159,7 +189,7 @@ class App {
       if (!res.ok) throw new Error("Could not fetch file");
       let text = await res.text();
 
-      // Configure marked
+      // Configure marked with auto table wrapping for mobile
       marked.setOptions({
         highlight: function(code, lang) {
           if (Prism.languages[lang]) {
@@ -172,15 +202,22 @@ class App {
       let parsedHtml = marked.parse(text);
       this.contentEl.innerHTML = `<div class="markdown-body">${parsedHtml}</div>` + this.renderNavigationButtons();
       
+      // Wrap tables for responsive mobile scroll
+      this.contentEl.querySelectorAll("table").forEach(table => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "table-wrapper";
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
+
       // Post-processing
       if (window.Prism) Prism.highlightAll();
       window.scrollTo(0, 0);
 
-      this.bindBottomNav();
     } catch (err) {
-      this.contentEl.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--accent-red);">
-        <h2>⚠️ Không thể tải nội dung</h2>
-        <p style="margin-top: 0.5rem; color: var(--text-secondary);">Vui lòng kiểm tra lại đường dẫn file hoặc chạy qua local HTTP server.</p>
+      this.contentEl.innerHTML = `<div style="text-align:center; padding: 3rem 1rem; color: var(--accent-red);">
+        <h2 style="font-size:1.3rem;">⚠️ Không thể tải nội dung</h2>
+        <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size:0.9rem;">Vui lòng kiểm tra lại đường dẫn file hoặc xem qua GitHub Pages.</p>
       </div>`;
     }
   }
@@ -201,10 +238,6 @@ class App {
     `;
   }
 
-  bindBottomNav() {
-    // Smooth navigation bindings if needed
-  }
-
   handleSearch(query) {
     if (!query.trim()) {
       this.searchOverlay.style.display = "none";
@@ -223,7 +256,7 @@ class App {
     });
 
     if (results.length === 0) {
-      this.searchOverlay.innerHTML = `<div style="padding: 1rem; color: var(--text-muted); text-align:center;">Không tìm thấy kết quả</div>`;
+      this.searchOverlay.innerHTML = `<div style="padding: 1rem; color: var(--text-muted); text-align:center; font-size:0.9rem;">Không tìm thấy kết quả</div>`;
     } else {
       let html = "";
       results.forEach(res => {

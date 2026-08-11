@@ -2,7 +2,7 @@
 <html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Senior Java & Tech Lead — Interview Bootcamp Portal</title>
   <meta name="description" content="Bộ giáo trình ôn phỏng vấn hoàn chỉnh dành cho Senior Java Backend Engineer và Java Tech Lead.">
   
@@ -17,43 +17,76 @@
 </head>
 <body>
 
+  <!-- Backdrop Overlay for Mobile Sidebar -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
   <!-- Top Navigation Header -->
   <header class="navbar">
     <a href="#README.md" class="logo-area">
-      <i class="fab fa-java" style="color: var(--accent-blue); font-size: 1.5rem;"></i>
-      <span>Senior Java Bootcamp</span>
-      <span class="logo-badge">TECH LEAD</span>
+      <i class="fab fa-java" style="color: var(--accent-blue); font-size: 1.4rem;"></i>
+      <span>Senior Java</span>
+      <span class="logo-badge">BOOTCAMP</span>
     </a>
 
     <div class="nav-actions">
-      <!-- Search Input -->
+      <!-- Search Input Desktop -->
       <div class="search-box">
         <i class="fas fa-search search-icon"></i>
         <input type="text" id="searchInput" class="search-input" placeholder="Tìm bài học, chủ đề..." autocomplete="off">
-        <div id="searchResults" class="search-results-modal"></div>
       </div>
+
+      <!-- Search Button Mobile -->
+      <button id="mobileSearchBtn" class="mobile-search-btn" title="Tìm kiếm">
+        <i class="fas fa-search"></i>
+      </button>
 
       <!-- Theme Switcher -->
       <button id="themeToggle" class="theme-toggle" title="Đổi giao diện Sáng/Tối">
         <i class="fas fa-moon"></i>
       </button>
-
-      <!-- Mobile Menu Button -->
-      <button id="mobileToggle" class="mobile-toggle" title="Menu">
-        <i class="fas fa-bars"></i>
-      </button>
     </div>
   </header>
+
+  <!-- Search Modal Container -->
+  <div id="searchResults" class="search-results-modal"></div>
 
   <!-- Application Main Body -->
   <div id="app">
     <!-- Left Navigation Drawer -->
-    <nav id="sidebar" class="sidebar"></nav>
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header-mobile">
+        <span style="font-weight: 800; color: var(--accent-blue);"><i class="fab fa-java"></i> DANH MỤC BÀI HỌC</span>
+        <button id="closeSidebarBtn" style="background:none; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="sidebarMenuContent"></div>
+    </nav>
 
     <!-- Main Content Reader -->
     <main class="main-layout">
       <div id="content"></div>
     </main>
+  </div>
+
+  <!-- Mobile Floating Sticky Bottom Bar -->
+  <div class="mobile-bottom-bar">
+    <button id="barMenuBtn" class="bar-btn">
+      <i class="fas fa-list-ul"></i>
+      <span>Danh mục</span>
+    </button>
+    <button id="barSearchBtn" class="bar-btn">
+      <i class="fas fa-search"></i>
+      <span>Tìm kiếm</span>
+    </button>
+    <button id="barTopBtn" class="bar-btn">
+      <i class="fas fa-arrow-up"></i>
+      <span>Đầu trang</span>
+    </button>
+    <button id="barThemeBtn" class="bar-btn">
+      <i class="fas fa-adjust"></i>
+      <span>Giao diện</span>
+    </button>
   </div>
 
   <!-- CDN Dependencies -->
